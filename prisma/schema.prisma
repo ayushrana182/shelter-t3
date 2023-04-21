@@ -36,6 +36,7 @@ model Account {
     id_token                 String? @db.Text
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
     @@unique([provider, providerAccountId])
 }
 
@@ -55,32 +56,34 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    topics        Topic[]
+    dogs          Dog[]
+    cats          Cat[]
 }
 
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
+
     @@unique([identifier, token])
 }
 
-model Topic {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    title     String
-    user      User     @relation(fields: [userId], references: [id])
-    userId    String
-    notes     Note[]
+model Dog {
+    id     String @id @default(cuid())
+    name   String
+    breed  String
+    about  String
+    status String
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
 }
 
-model Note {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    title     String   
-    content   String   @db.Text
-    topic     Topic    @relation(fields: [topicId], references: [id])
-    topicId   String
+model Cat {
+    id     String @id @default(cuid())
+    name   String
+    breed  String
+    about  String
+    status String
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
 }
